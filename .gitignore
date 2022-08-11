@@ -1,6 +1,7 @@
 # Binaries
 main
 generate-input
+test
 
 # Input list files
 *.list
