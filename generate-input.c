@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define N 1000
 #define AZLEN 26
@@ -74,9 +75,7 @@ int gen_dup_on_second(char list[][AZLEN], size_t len)
     srand(SEED);
     for (int line = 0; line < len; line++) {
         char c = rand() % AZLEN + 'a';
-        for (int pos = 0; pos < AZLEN; pos++) {
-            list[line][pos] = c;
-        }
+        memset(list[line], c, AZLEN);
     }
     return 0;
 }
