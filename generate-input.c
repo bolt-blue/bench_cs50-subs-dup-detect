@@ -42,6 +42,8 @@ int main(void)
     gen_no_dup(list, N);
     save_list(list, N, filename);
 
+    free(list);
+
     return 0;
 }
 
@@ -140,5 +142,6 @@ int save_list(char list[][AZLEN], size_t len, char *filename)
         fprintf(outfile, "%.*s\n", AZLEN, list[line]);
     }
 
+    fclose(outfile);
     return 0;
 }
