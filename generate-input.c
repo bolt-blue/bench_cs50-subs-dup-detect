@@ -124,6 +124,7 @@ int gen_no_dup(char list[][AZLEN], size_t len)
 
 /*
  * Save list to file, one line per list item
+ * First line shall be the number of list items that follow
  *
  * Create file `filename` if it does not exist
  * Overwrite file `filename` if it does exist
@@ -137,6 +138,8 @@ int save_list(char list[][AZLEN], size_t len, char *filename)
     FILE *outfile = fopen(filename, "w");
     if (!outfile)
         return -1;
+
+    fprintf(outfile, "%lu\n", len);
 
     for (int line = 0; line < len; line++) {
         fprintf(outfile, "%.*s\n", AZLEN, list[line]);
