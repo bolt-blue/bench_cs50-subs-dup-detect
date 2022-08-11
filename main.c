@@ -4,6 +4,8 @@
 #include <string.h>
 #include <sys/resource.h>
 
+#include "detectors.c"
+
 #define FNAMELEN 16
 
 typedef int (*check_func)(char [26]);
@@ -11,8 +13,6 @@ typedef int (*check_func)(char [26]);
 // Prototypes
 size_t load_list(FILE *file, size_t len, char list[len][26]);
 double process(size_t len, char list[len][26], check_func cf);
-int array_method(char str[26]);
-int bitflag_method(char str[26]);
 double calculate_runtime(const struct rusage a, const struct rusage b);
 
 /*
@@ -122,18 +122,6 @@ double process(size_t len, char list[len][26], check_func cf) {
     getrusage(RUSAGE_SELF, &after);
 
     return calculate_runtime(before, after);
-}
-
-// TODO: Implement
-int array_method(char str[26])
-{
-    return 0;
-}
-
-// TODO: Implement
-int bitflag_method(char str[26])
-{
-    return 0;
 }
 
 /*
