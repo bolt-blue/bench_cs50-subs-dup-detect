@@ -1,12 +1,14 @@
 CC ?= clang
 
 .PHONY: all
-all: main generate-input test
+all: benchmark generate-input test
 	./test
 
-main:
+benchmark:
 
 generate-input:
 
 test:
 
+clean:
+	rm benchmark generate-input test
