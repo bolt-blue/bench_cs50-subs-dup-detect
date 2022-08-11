@@ -21,12 +21,9 @@ int save_list(char list[][AZLEN], size_t len, char *filename);
 int main(void)
 {
     // TODO:
-    // - Allocate memory
     // - Generate:
-    //   - random strings
-    //   - duplicate on second char
-    //   - duplicate on final char
     //   - no duplicate
+    // - Error checking
 
     char (*list)[AZLEN] = malloc(N * AZLEN);
     char *filename;
@@ -39,11 +36,11 @@ int main(void)
     gen_dup_on_second(list, N);
     save_list(list, N, filename);
 
-#if 0
     filename = "dup-final.list";
     gen_dup_on_final(list, N);
     save_list(list, N, filename);
 
+#if 0
     filename = "no-dup.list";
     gen_no_dup(list, N);
     save_list(list, N, filename);
@@ -80,7 +77,27 @@ int gen_dup_on_second(char list[][AZLEN], size_t len)
     return 0;
 }
 
-int gen_dup_on_final(char list[][AZLEN], size_t len);
+/*
+ * Generate `len` strings of length `AZLEN` consisting of the first 25 letters
+ * of the alphabet, followed by one duplicated letter
+ * NOTE: The letter 'z' will never be duplcated but this should not be an
+ * issue for this use-case
+ */
+int gen_dup_on_final(char list[][AZLEN], size_t len)
+{
+    srand(SEED);
+    char alphabet[AZLEN] = {"abcdefghijklmnopqrstuvwxyz"};
+    for (int line = 0; line < len; line++) {
+        memcpy(list[line], alphabet, AZLEN);
+    }
+    for (int line = 0; line < len; line++) {
+        // Only use characters from 'a' to 'y'
+        char c = rand() % (AZLEN - 1) + 'a';
+        list[line][AZLEN - 1] = c;
+    }
+    return 0;
+}
+
 int gen_no_dup(char list[][AZLEN], size_t len);
 
 /*
