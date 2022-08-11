@@ -3,6 +3,7 @@
 
 #define N 1000
 #define AZLEN 26
+#define SEED 0xdeadbeef
 
 // Prototypes
 int gen_random(char list[][AZLEN], size_t len);
@@ -33,6 +34,7 @@ int main(void)
     gen_random(list, N);
     save_list(list, N, filename);
 
+#if 0
     filename = "dup-second.list";
     gen_dup_on_second(list, N);
     save_list(list, N, filename);
@@ -44,14 +46,23 @@ int main(void)
     filename = "no-dup.list";
     gen_no_dup(list, N);
     save_list(list, N, filename);
-
+#endif
 
     return 0;
 }
 
+/*
+ * Generate `len` strings of length `AZLEN` consisting of a random assortment
+ * of letters 'a' through 'z'
+ */
 int gen_random(char list[][AZLEN], size_t len)
 {
-
+    srand(SEED);
+    for (int line = 0; line < len; line++) {
+        for (int pos = 0; pos < AZLEN; pos++) {
+            list[line][pos] = rand() % AZLEN + 'a';
+        }
+    }
     return 0;
 }
 
