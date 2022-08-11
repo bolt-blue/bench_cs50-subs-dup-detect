@@ -21,8 +21,6 @@ int save_list(char list[][AZLEN], size_t len, char *filename);
 int main(void)
 {
     // TODO:
-    // - Generate:
-    //   - no duplicate
     // - Error checking
 
     char (*list)[AZLEN] = malloc(N * AZLEN);
@@ -40,11 +38,9 @@ int main(void)
     gen_dup_on_final(list, N);
     save_list(list, N, filename);
 
-#if 0
     filename = "no-dup.list";
     gen_no_dup(list, N);
     save_list(list, N, filename);
-#endif
 
     return 0;
 }
@@ -98,7 +94,31 @@ int gen_dup_on_final(char list[][AZLEN], size_t len)
     return 0;
 }
 
-int gen_no_dup(char list[][AZLEN], size_t len);
+/*
+ * Generate `len` strings of length `AZLEN` consisting of no duplicated letters
+ *
+ * Start by initialising every string in `list` to be the alphabet, then
+ * shuffle the letter positions
+ */
+int gen_no_dup(char list[][AZLEN], size_t len)
+{
+    srand(SEED);
+
+    char alphabet[AZLEN] = {"abcdefghijklmnopqrstuvwxyz"};
+    for (int line = 0; line < len; line++) {
+        memcpy(list[line], alphabet, AZLEN);
+    }
+
+    for (int line = 0; line < len; line++) {
+        for (int pos = 0; pos < AZLEN; pos++) {
+            int swap_pos = rand() % AZLEN;
+            char tmp = list[line][swap_pos];
+            list[line][swap_pos] = list[line][pos];
+            list[line][pos] = tmp;
+        }
+    }
+    return 0;
+}
 
 /*
  * Save list to file, one line per list item
