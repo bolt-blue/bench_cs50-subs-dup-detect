@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define N 1000
+#define N 100000
 #define AZLEN 26
 #define SEED 0xdeadbeef
 
