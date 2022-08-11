@@ -1,0 +1,6 @@
+# Binaries
+main
+generate-input
+
+# Input list files
+*.list
