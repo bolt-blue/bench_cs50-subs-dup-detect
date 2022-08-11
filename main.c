@@ -2,11 +2,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/resource.h>
 
 #define FNAMELEN 16
 
+typedef int (*check_func)(char [26]);
+
 // Prototypes
 size_t load_list(FILE *file, size_t len, char list[len][26]);
+double process(size_t len, char list[len][26], check_func cf);
+int array_method(char str[26]);
+int bitflag_method(char str[26]);
+double calculate_runtime(const struct rusage a, const struct rusage b);
 
 /*
  * Compare the speed of execution for detecting duplicate alphabetical
@@ -57,10 +64,15 @@ int main(void)
             fprintf(stderr, "ERROR: Read %lu lines when %lu were expected\n",
                     loaded, len);
 
-        // TODO:
-        // - Time array method
-        // - Time bitflag method
-        // - Print results
+        double time_array = 0.0, time_bitflags = 0.0;
+
+        time_array = process(len, list, array_method);
+        time_bitflags = process(len, list, bitflag_method);
+
+        printf("=== %s ===\n", list_files[i]);
+        printf("%-15s: %fs\n", "Array method", time_array);
+        printf("%-15s: %fs\n", "Bitflag method", time_bitflags);
+        printf("\n");
 
         // Clean up
         free(list);
@@ -96,4 +108,48 @@ size_t load_list(FILE *file, size_t len, char list[len][26])
     }
 
     return count;
+}
+
+double process(size_t len, char list[len][26], check_func cf) {
+    struct rusage before, after;
+
+    getrusage(RUSAGE_SELF, &before);
+
+    for (int line = 0; line < len; line++) {
+        cf(list[line]);
+    }
+
+    getrusage(RUSAGE_SELF, &after);
+
+    return calculate_runtime(before, after);
+}
+
+// TODO: Implement
+int array_method(char str[26])
+{
+    return 0;
+}
+
+// TODO: Implement
+int bitflag_method(char str[26])
+{
+    return 0;
+}
+
+/*
+ * Calculate the difference in seconds between `a` and `b`
+ *
+ * Expects:
+ * Both parameters to be valid rusage structs
+ *
+ * Return:
+ * The number of seconds between `a` and `b`
+ */
+double calculate_runtime(const struct rusage b, const struct rusage a)
+{
+    return ((((a.ru_utime.tv_sec * 1000000 + a.ru_utime.tv_usec)
+            - (b.ru_utime.tv_sec * 1000000 + b.ru_utime.tv_usec))
+           + ((a.ru_stime.tv_sec * 1000000 + a.ru_stime.tv_usec)
+            - (b.ru_stime.tv_sec * 1000000 + b.ru_stime.tv_usec)))
+           / 1000000.0);
 }
