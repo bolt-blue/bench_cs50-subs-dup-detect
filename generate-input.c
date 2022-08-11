@@ -71,6 +71,13 @@ int gen_no_dup(char list[][AZLEN], size_t len);
  */
 int save_list(char list[][AZLEN], size_t len, char *filename)
 {
+    FILE *outfile = fopen(filename, "w");
+    if (!outfile)
+        return -1;
+
+    for (int line = 0; line < len; line++) {
+        fprintf(outfile, "%.*s\n", AZLEN, list[line]);
+    }
 
     return 0;
 }
