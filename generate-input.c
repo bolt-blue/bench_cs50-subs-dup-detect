@@ -34,11 +34,11 @@ int main(void)
     gen_random(list, N);
     save_list(list, N, filename);
 
-#if 0
     filename = "dup-second.list";
     gen_dup_on_second(list, N);
     save_list(list, N, filename);
 
+#if 0
     filename = "dup-final.list";
     gen_dup_on_final(list, N);
     save_list(list, N, filename);
@@ -66,7 +66,21 @@ int gen_random(char list[][AZLEN], size_t len)
     return 0;
 }
 
-int gen_dup_on_second(char list[][AZLEN], size_t len);
+/*
+ * Generate `len` strings of length `AZLEN` consisting of one repeated letter
+ */
+int gen_dup_on_second(char list[][AZLEN], size_t len)
+{
+    srand(SEED);
+    for (int line = 0; line < len; line++) {
+        char c = rand() % AZLEN + 'a';
+        for (int pos = 0; pos < AZLEN; pos++) {
+            list[line][pos] = c;
+        }
+    }
+    return 0;
+}
+
 int gen_dup_on_final(char list[][AZLEN], size_t len);
 int gen_no_dup(char list[][AZLEN], size_t len);
 
